@@ -21,7 +21,7 @@ $data = json_decode(file_get_contents('php://input'), true);
 $name = htmlspecialchars($data['name'], ENT_QUOTES, 'UTF-8');
 $ip = filter_var($data['ip'], FILTER_VALIDATE_IP) ?: '127.0.0.1';
 // $whitelist = isset($data['whitelist']) && $data['whitelist'] == 1 ? 1 : 0;
-$whitelist = 0;
+$whitelist = 1;
 
 // Check if username already exists
 $checkStmt = $conn->prepare("SELECT id FROM users WHERE name = ?");
