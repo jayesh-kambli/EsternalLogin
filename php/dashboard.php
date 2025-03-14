@@ -36,7 +36,7 @@ if ($client_ip) {
 }
 
 // Fetch user details
-$stmt = $conn->prepare("SELECT name, whitelist, uuid FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT name, whitelist, uuid, geyser FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -46,6 +46,7 @@ if ($result->num_rows > 0) {
     echo json_encode([
         'success' => true,
         'name' => $row['name'],
+        'geyser' => $row['geyser'],
         'uuid' => $row['uuid'],
         'whitelisted' => $row['whitelist'],
         'ip_updated' => $ipUpdated // Send IP update status
