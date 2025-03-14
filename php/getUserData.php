@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/libs/Spyc.php'; // Manually including Spyc
 
 // Get UUID from request
 $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : '';
