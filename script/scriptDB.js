@@ -76,15 +76,15 @@ function updateDashboard(clientIp) {
 
             const uuid = data.uuid; // Replace with actual UUID
 
-            fetch(`./php/getUserData.php?uuid=${uuid}`)
-                .then(response => response.json())
-                .then(userData => {
-                    console.log("User Data:", userData);
-                    document.getElementById("playerName").textContent = userData["last-account-name"];
-                    document.getElementById("money").textContent = userData.money;
-                    document.getElementById("lastLogin").textContent = new Date(userData.timestamps.login).toLocaleString();
-                })
-                .catch(error => console.error("Error:", error));
+            // fetch(`./php/getUserData.php?uuid=${uuid}`)
+            //     .then(response => response.json())
+            //     .then(userData => {
+            //         console.log("User Data:", userData);
+            //         document.getElementById("playerName").textContent = userData["last-account-name"];
+            //         document.getElementById("money").textContent = userData.money;
+            //         document.getElementById("lastLogin").textContent = new Date(userData.timestamps.login).toLocaleString();
+            //     })
+            //     .catch(error => console.error("Error:", error));
 
 
             let statusText = data.whitelisted ? "You are whitelisted!" : "Not whitelisted! Contact Admin.";
