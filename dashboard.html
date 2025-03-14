@@ -135,7 +135,7 @@
             ipField.select();
             ipField.setSelectionRange(0, 99999); // For mobile support
             navigator.clipboard.writeText(ipField.value);
-            alert("Copied: " + ipField.value);
+            // alert("Copied: " + ipField.value);
         }
 
         function copyIP2() {
@@ -143,8 +143,45 @@
             ipField.select();
             ipField.setSelectionRange(0, 99999); // For mobile support
             navigator.clipboard.writeText(ipField.value);
-            alert("Copied: " + ipField.value);
+            // alert("Copied: " + ipField.value);
         }
+
+        async function getXUID(gamertag) {
+            const API_KEY = "9303786b-f668-4395-b712-80313744e1e4";
+            const url = `https://xbl.io/api/v2/search/${gamertag}`;
+
+            const myHeaders = new Headers();
+            myHeaders.append("X-Authorization", API_KEY);
+            myHeaders.append("Cookie", "ci_session=sv18j6uc4npc8647e5f8qmv92lsre40m");
+
+            const requestOptions = {
+                method: "GET",
+                headers: myHeaders,
+                redirect: "follow"
+            };
+
+            try {
+                const response = await fetch(url, requestOptions);
+                const data = await response.json();
+
+                if (!data.people || data.people.length === 0) {
+                    throw new Error("XUID not found");
+                }
+
+                let xuid = data.people[0].xuid; // Extract XUID
+                let hexXUID = BigInt(xuid).toString(16).padStart(16, "0"); // Convert to 16-char hex
+
+                // Format: 00000000-0000-0000-XXXX-XXXXXXXXXXXX
+                let formattedXUID = `00000000-0000-0000-${hexXUID.slice(0, 4)}-${hexXUID.slice(4)}`;
+
+                console.log("Formatted XUID:", formattedXUID);
+                return formattedXUID;
+            } catch (error) {
+                console.error("Error fetching XUID:", error);
+                return null;
+            }
+        }
+
 
         function updateDashboard(clientIp) {
             fetch('./dashboard.php', {
@@ -159,6 +196,14 @@
                         window.location.href = "index.html"; // Redirect if not logged in
                         return;
                     }
+                    console.log(data.name);
+                    console.log(data.uuid);
+
+                    const API_KEY = "9303786b-f668-4395-b712-80313744e1e4";
+                    getXUID("Jayesh44652315").then((formattedXUID) => {
+                        console.log("Final XUID:", formattedXUID);
+                    });
+
 
                     let statusText = data.whitelisted ? "You are whitelisted!" : "Not whitelisted! Contact Admin.";
                     let mainColor = data.whitelisted ? "green" : "red";
@@ -186,7 +231,6 @@
         }
 
         document.addEventListener("DOMContentLoaded", function () {
-
             fetch('https://api.ipify.org?format=json') // Fetch public IP from ipify API
                 .then(response => response.json())
                 .then(data => {
@@ -225,13 +269,7 @@
 
         });
 
-        function logout() {
-
-        }
-
-
     </script>
-
 </body>
 
 </html>
