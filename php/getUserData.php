@@ -1,6 +1,6 @@
 <?php
 header("Content-Type: application/json");
-require 'spyc.php'; // Load YAML parser
+require __DIR__ . '/vendor/autoload.php';
 
 // Get UUID from request
 $uuid = isset($_GET['uuid']) ? $_GET['uuid'] : '';
