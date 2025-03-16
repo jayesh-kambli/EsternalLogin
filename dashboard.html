@@ -36,6 +36,27 @@
                 Verifing Device.....
             </p>
         </div>
+
+        <div class="card shadow p-4 mt-3 loggedIn">
+            <div class="d-flex justify-content-start align-items-center">
+                <p class="m-0" id="playerName">Ingame Name: </p>
+                <div class="spinner-grow spinner-grow-sm mx-4" role="status" id="nameBlinker">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <div class="d-flex justify-content-start align-items-center mt-1">
+                <p class="m-0" id="playerMoney">Ingame Money: </p>
+                <div class="spinner-grow spinner-grow-sm mx-4" role="status" id="moneyBlinker">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+            <p style="font-size: 0.8rem; background-color: rgba(255, 187, 0, 0.8); width: fit-content;" class="m-0 mt-2 rounded p-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                    <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                  </svg>
+                  You should have joined the server at least once to get this data.</p>
+        </div>
+
         <div class="card shadow p-4 mt-3 loggedIn">
             <h2 class="mb-4">Java Edition Ip</h2>
             <div class="row">
@@ -127,7 +148,7 @@
 
     <!-- Copy to Clipboard Script -->
     <script>
-        
+
 
     </script>
 </body>

@@ -35,8 +35,13 @@ if ($client_ip) {
     $updateIpStmt->close();
 }
 
-// Fetch user details
-$stmt = $conn->prepare("SELECT name, whitelist, uuid, geyser FROM users WHERE id = ?");
+// Fetch user details along with UUID
+$stmt = $conn->prepare("
+    SELECT u.name, u.whitelist, u.geyser, uuid.uuid
+    FROM users u
+    LEFT JOIN uuid ON u.name = uuid.name
+    WHERE u.id = ?
+");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -46,10 +51,10 @@ if ($result->num_rows > 0) {
     echo json_encode([
         'success' => true,
         'name' => $row['name'],
+        'uuid' => $row['uuid'] ?? 0, // Returns null if UUID is not found
         'geyser' => $row['geyser'],
-        'uuid' => $row['uuid'],
         'whitelisted' => $row['whitelist'],
-        'ip_updated' => $ipUpdated // Send IP update status
+        'ip_updated' => $ipUpdated
     ]);
 } else {
     echo json_encode(['success' => false, 'message' => 'User not found.']);

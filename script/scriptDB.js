@@ -71,20 +71,67 @@ function updateDashboard(clientIp) {
                 window.location.href = "index.html"; // Redirect if not logged in
                 return;
             }
-            console.log(data.name);
-            console.log(data.uuid);
+            // console.log(data.name);
+            // console.log(data.uuid);
 
             const uuid = data.uuid; // Replace with actual UUID
 
-            // fetch(`./php/getUserData.php?uuid=${uuid}`)
-            //     .then(response => response.json())
-            //     .then(userData => {
-            //         console.log("User Data:", userData);
-            //         document.getElementById("playerName").textContent = userData["last-account-name"];
-            //         document.getElementById("money").textContent = userData.money;
-            //         document.getElementById("lastLogin").textContent = new Date(userData.timestamps.login).toLocaleString();
-            //     })
-            //     .catch(error => console.error("Error:", error));
+            function getProfile() {
+                fetch("http://localhost:3000/getData", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ uuid: uuid }) // Replace with actual UUID
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            fetch("http://localhost:3000/update-uuid", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({ id: 1, name: "Jayesh" })
+                            })
+                                .then(response => response.json())
+                                .then(data => { console.log("Response:", data) })
+                                .catch(error => console.error("Error:", error));
+                            const reloadNotice = `<span class="badge text-bg-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
+                            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                          </svg> Refresh page</span>`;
+                            document.getElementById("playerName").innerHTML = `Ingame Name: ${reloadNotice}`;
+                            document.getElementById("nameBlinker").style.display = "none";
+                            document.getElementById("playerMoney").innerHTML = `Ingame Money: ${reloadNotice}`;
+
+                        } else {
+                            document.getElementById("playerName").innerHTML = `Ingame Name: ${data.data["last-account-name"]}`;
+                            document.getElementById("nameBlinker").style.display = "none";
+                            document.getElementById("moneyBlinker").style.display = "none";
+                            let money = Math.round(data.data.money) > 0 ? Math.round(data.data.money) : 0;
+                            document.getElementById("playerMoney").innerHTML = `Ingame Money: <span class="badge text-bg-success color-white">${"$ " + money}</span> 
+                            <svg xmlns="http://www.w3.org/2000/svg" id="refreshBalance" style="cursor: pointer;" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466"/>
+                            </svg>`;
+
+                            document.getElementById("refreshBalance").addEventListener("click", () => {
+                                document.getElementById("moneyBlinker").style.display = "block";
+                                document.getElementById("playerMoney").innerHTML = `Ingame Money: `;
+                                setTimeout(() => {
+                                    getProfile();
+                                }, 1000);
+                            });
+
+                        }
+                    })
+                    .catch(error => console.error("Error:", error));
+            }
+
+            //to avoide double code
+            getProfile();
+
+
+
+
 
 
             let statusText = data.whitelisted ? "You are whitelisted!" : "Not whitelisted! Contact Admin.";
